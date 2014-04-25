@@ -30,12 +30,36 @@ class FacebookBot extends Adapter
       accessToken : accessToken
 
     @client.on 'online', @.onOnline
-    @client.on 'error', @.onError
-    @client.on 'presence', @.onPresence
-    @client.on 'roster', @.onRoster
-    @client.on 'message', @.onMessage
-    @client.on 'composing', @.onComposing
-    @client.on 'vcard', @.onVcard
+    #@client.on 'error', @.onError
+    #@client.on 'presence', @.onPresence
+    #@client.on 'roster', @.onRoster
+    #@client.on 'message', @.onMessage
+    #@client.on 'composing', @.onComposing
+    #@client.on 'vcard', @.onVcard
+
+  onOnline: () ->
+    console.log "online"
+
+    #Get friend list
+    self.client.roster()
+
+    #Get a vcard
+    self.client.vcard()
+
+    fbapi = FacebookApi.user(access_token)
+
+    fbapi.me.info (err, data) ->
+      if err
+        console.log "Error: " + JSON.stringify(err)
+      else
+        console.log "Data: " + JSON.stringify(data)
+        self.profile = data
+        self.robot.name = data.first_name
+
+    #Get a friend vcard
+    #self.client.vcard('-FACEBOOK_ID@chat.facebook.com');
+
+    self.emit "connected"
 
     #@options = options
 
