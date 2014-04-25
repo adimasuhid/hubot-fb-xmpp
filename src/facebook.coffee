@@ -44,3 +44,6 @@ class FacebookBot extends Adapter
 
     console.log "+++"
 
+exports.use = (robot) ->
+  new FacebookBot robot
+
